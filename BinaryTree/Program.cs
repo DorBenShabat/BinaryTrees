@@ -3,16 +3,13 @@
 class TreeObjects
 {
     public int Value { get; set; }
-
     public TreeObjects Left { get; set; }
-
     public TreeObjects Right { get; set; }
 
     public TreeObjects(int value)
     {
         this.Value = value;
     }
-
 }
 
 class CheckValidBSTree
@@ -23,49 +20,65 @@ class CheckValidBSTree
     }
     private static bool IsValidBSTree(TreeObjects branch, long minValue, long maxValue)
     {
-        if(branch == null) return true;
+        if (branch == null) return true;
 
-        if(branch.Value <= minValue || branch.Value >= maxValue) return false;
+        if (branch.Value <= minValue || branch.Value >= maxValue) return false;
 
         return IsValidBSTree(branch.Left, minValue, branch.Value) && IsValidBSTree(branch.Right, branch.Value, maxValue);
     }
+}
+
+class LowestCommonAncestor
+{
+    public static TreeObjects FindLCA(TreeObjects root, TreeObjects node1, TreeObjects node2)
+    {
+        if (root == null || node1 == null || node2 == null)
+            return null;
+
+        if (root == node1 || root == node2)
+            return root;
+
+        TreeObjects leftLCA = FindLCA(root.Left, node1, node2);
+        TreeObjects rightLCA = FindLCA(root.Right, node1, node2);
+
+        if (leftLCA != null && rightLCA != null)
+            return root;
+        else if (leftLCA != null)
+            return leftLCA;
+        else
+            return rightLCA;
+    }
+
 }
 
 class Program
 {
     static void Main()
     {
-        Console.WriteLine("Enter Root Number: ");
-        int rootNum = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Enter Right Branch Number: ");
-        int rightBranch = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Enter Right Branch Of Right Branch Number: ");
-        int rightRightBranch = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Enter Left Branch Of Right Branch Number: ");
-        int rightLeftBranch = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Enter Left Branch Number: ");
-        int leftBranch = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Enter Left Branch Of Left Branch Number: ");
-        int leftLeftBranch = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Enter Right Branch Of Left Branch Number: ");
-        int leftRightBranch = int.Parse(Console.ReadLine());
 
 
+        // Create the tree
+        TreeObjects root = new TreeObjects(8);
+        root.Left = new TreeObjects(6);
+        root.Right = new TreeObjects(14);
+        root.Left.Left = new TreeObjects(3);
+        root.Left.Right = new TreeObjects(7);
+        root.Right.Left = new TreeObjects(10);
+        root.Right.Right = new TreeObjects(16);
+        root.Left.Left.Left = new TreeObjects(2);
+        root.Left.Left.Right = new TreeObjects(5);
+        root.Right.Left.Left = new TreeObjects(9);
+        root.Right.Left.Right = new TreeObjects(11);
 
-        TreeObjects rootTrre = new TreeObjects(rootNum);
-        rootTrre.Right = new TreeObjects(rightBranch);
-        rootTrre.Right.Right = new TreeObjects(rightRightBranch);
-        rootTrre.Right.Left = new TreeObjects(rightLeftBranch);
-        rootTrre.Left = new TreeObjects(leftBranch);
-        rootTrre.Left.Left = new TreeObjects(leftLeftBranch);
-        rootTrre.Left.Right = new TreeObjects(leftRightBranch);
-        
-        Console.WriteLine(CheckValidBSTree.IsValidBSTree(rootTrre));
+        TreeObjects node1 = root.Right.Left; // Node with value 10
+        TreeObjects node2 = root.Right.Right; // Node with value 16
+        TreeObjects lca = LowestCommonAncestor.FindLCA(root, node1, node2);
+        bool BSTanswer = CheckValidBSTree.IsValidBSTree(root);
+
+        Console.WriteLine(BSTanswer); // Print True
+        Console.WriteLine($"LCA of {node1.Value} and {node2.Value} is: {lca.Value}"); // Should print LCA of 10 and 16 is: 14
     }
+
+
+
 }

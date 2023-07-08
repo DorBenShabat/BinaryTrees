@@ -76,7 +76,7 @@ class Program
         bool BSTanswer = CheckValidBSTree.IsValidBSTree(root);
 
         Console.WriteLine(BSTanswer); // Print True
-        Console.WriteLine($"LCA of {node1.Value} and {node2.Value} is: {lca.Value}"); // Should print LCA of 10 and 16 is: 14
+        Console.WriteLine($"LCA of {node1.Value} and {node2.Value} is: {lca.Value}"); 
     }
 
 

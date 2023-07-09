@@ -12,7 +12,7 @@ class TreeObjects
     }
 }
 
-class CheckValidBSTree
+class Solutions
 {
     public static bool IsValidBSTree(TreeObjects tree)
     {
@@ -26,10 +26,25 @@ class CheckValidBSTree
 
         return IsValidBSTree(branch.Left, minValue, branch.Value) && IsValidBSTree(branch.Right, branch.Value, maxValue);
     }
-}
 
-class LowestCommonAncestor
-{
+    public static bool IsSymmetric(TreeObjects root)
+    {
+        if (root == null)
+            return true;
+
+        return IsMirror(root.Left, root.Right);
+    }
+
+    private static bool IsMirror(TreeObjects leftNode, TreeObjects rightNode)
+    {
+        if (leftNode == null && rightNode == null)
+            return true;
+
+        if (leftNode == null || rightNode == null || leftNode.Value != rightNode.Value)
+            return false;
+
+        return IsMirror(leftNode.Left, rightNode.Right) && IsMirror(leftNode.Right, rightNode.Left);
+    }
     public static TreeObjects FindLCA(TreeObjects root, TreeObjects node1, TreeObjects node2)
     {
         if (root == null || node1 == null || node2 == null)
@@ -48,38 +63,106 @@ class LowestCommonAncestor
         else
             return rightLCA;
     }
+    public static int TreeDepth(TreeObjects root)
+    {
+        if(root == null) return 0;
 
+        int leftDepth = TreeDepth(root.Left);
+        int rightDepth = TreeDepth(root.Right);
+
+        return Math.Max(leftDepth, rightDepth) + 1;
+    }
+    public static List<int> InorderTraversal(TreeObjects root)
+    {
+        List<int> result = new List<int>();
+        if (root == null)
+        {
+            return result;
+        }
+
+        Stack<TreeObjects> stack = new Stack<TreeObjects>();
+        TreeObjects currentNode = root;
+
+        while (currentNode != null || stack.Count > 0)
+        {
+            while (currentNode != null)
+            {
+                stack.Push(currentNode);
+                currentNode = currentNode.Left;
+            }
+
+            currentNode = stack.Pop();
+            result.Add(currentNode.Value);
+
+            currentNode = currentNode.Right;
+        }
+
+        return result;
+    }
+    public static int FindMaximumValue(TreeObjects root)
+    {
+        List<int> treeObjects = InorderTraversal(root);
+
+        int maxValue = int.MinValue;
+        foreach(var value in treeObjects) 
+        {
+            if(value > maxValue) maxValue = value;
+        }
+        return maxValue;
+    }
 }
+
+
+
 
 class Program
 {
     static void Main()
     {
         // Create the tree
-        TreeObjects root = new TreeObjects(8);
-        root.Left = new TreeObjects(6);
-        root.Right = new TreeObjects(14);
+        TreeObjects root = new TreeObjects(1);
+        root.Left = new TreeObjects(2);
+        root.Right = new TreeObjects(2);
         root.Left.Left = new TreeObjects(3);
-        root.Left.Right = new TreeObjects(7);
-        root.Right.Left = new TreeObjects(10);
-        root.Right.Right = new TreeObjects(16);
-        root.Left.Left.Left = new TreeObjects(2);
-        root.Left.Left.Right = new TreeObjects(5);
-        root.Right.Left.Left = new TreeObjects(9);
-        root.Right.Left.Right = new TreeObjects(11);
-
-        TreeObjects node1 = root.Right.Left.Left; 
-        TreeObjects node2 = root.Left.Left.Left; 
-        TreeObjects lca = LowestCommonAncestor.FindLCA(root, node1, node2);
-        bool BSTanswer = CheckValidBSTree.IsValidBSTree(root);
+        root.Left.Right = new TreeObjects(4);
+        root.Right.Left = new TreeObjects(4);
+        root.Right.Right = new TreeObjects(3);
+        root.Left.Left.Left = new TreeObjects(5);
+        root.Left.Right.Right = new TreeObjects(6);
+        root.Right.Left.Left = new TreeObjects(6);
+        root.Right.Right.Right = new TreeObjects(5);
 
 
+
+        //Answer if its BST tree 
+        bool BSTanswer = Solutions.IsValidBSTree(root);
         if (BSTanswer) 
             Console.WriteLine("Valid BST Tree");
         else 
             Console.WriteLine("Invalid BST Tree");
 
+        //Answer if its symmetric tree
+        bool symetricAnswer = Solutions.IsSymmetric(root);
+        if (symetricAnswer)
+            Console.WriteLine("It is a symetric tree");
+        else
+            Console.WriteLine("It is not a symetric tree");
+
+        //Answer the max depth of the tree
+        int depthAnswer = Solutions.TreeDepth(root);
+        Console.WriteLine($"The max depth of the tree is: {depthAnswer}");
+
+        //Answer what is the LCA of node1 and node2
+        TreeObjects node1 = root.Right.Left;
+        TreeObjects node2 = root.Right.Right;
+        TreeObjects lca = Solutions.FindLCA(root, node1, node2);
         Console.WriteLine($"LCA of {node1.Value} and {node2.Value} is: {lca.Value}"); 
+
+        //Answer what is the max value in the tree
+        int maxValueAnswer = Solutions.FindMaximumValue(root);
+        Console.WriteLine("The maximum value in the tree is: " + maxValueAnswer);
+
+        
     }
 
 }

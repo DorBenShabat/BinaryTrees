@@ -73,12 +73,11 @@ class Program
         TreeObjects lca = LowestCommonAncestor.FindLCA(root, node1, node2);
         bool BSTanswer = CheckValidBSTree.IsValidBSTree(root);
 
+
         if (BSTanswer) 
             Console.WriteLine("Valid BST Tree");
         else 
             Console.WriteLine("Invalid BST Tree");
-
-        Console.WriteLine(BSTanswer);
 
         Console.WriteLine($"LCA of {node1.Value} and {node2.Value} is: {lca.Value}"); 
     }

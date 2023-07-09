@@ -55,8 +55,6 @@ class Program
 {
     static void Main()
     {
-
-
         // Create the tree
         TreeObjects root = new TreeObjects(8);
         root.Left = new TreeObjects(6);
@@ -70,15 +68,19 @@ class Program
         root.Right.Left.Left = new TreeObjects(9);
         root.Right.Left.Right = new TreeObjects(11);
 
-        TreeObjects node1 = root.Right.Left; // Node with value 10
-        TreeObjects node2 = root.Right.Right; // Node with value 16
+        TreeObjects node1 = root.Right.Left.Left; 
+        TreeObjects node2 = root.Left.Left.Left; 
         TreeObjects lca = LowestCommonAncestor.FindLCA(root, node1, node2);
         bool BSTanswer = CheckValidBSTree.IsValidBSTree(root);
 
-        Console.WriteLine(BSTanswer); // Print True
-        Console.WriteLine($"LCA of {node1.Value} and {node2.Value} is: {lca.Value}"); // Should print LCA of 10 and 16 is: 14
+        if (BSTanswer) 
+            Console.WriteLine("Valid BST Tree");
+        else 
+            Console.WriteLine("Invalid BST Tree");
+
+        Console.WriteLine(BSTanswer);
+
+        Console.WriteLine($"LCA of {node1.Value} and {node2.Value} is: {lca.Value}"); 
     }
-
-
 
 }

@@ -110,6 +110,17 @@ class Solutions
         }
         return maxValue;
     }
+    public static int SumTreeObjects(TreeObjects root)
+    {
+        List<int> treeObjects = InorderTraversal(root);
+        int sum = 0;
+
+        foreach(var obj in treeObjects)
+        {
+            sum += obj;
+        }
+        return sum;
+    }
 }
 
 
@@ -162,6 +173,9 @@ class Program
         int maxValueAnswer = Solutions.FindMaximumValue(root);
         Console.WriteLine("The maximum value in the tree is: " + maxValueAnswer);
 
+        //Answer the sum of the tree objects
+        int sumObjectsAnswer = Solutions.SumTreeObjects(root);
+        Console.WriteLine("Sum of tree: " + sumObjectsAnswer);
         
     }
 
